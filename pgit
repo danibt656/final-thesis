@@ -6,7 +6,7 @@ if [ "$#" != "1" ]; then
     exit 0
 fi
 
-pip freeze > requirements.txt
+conda export tfg > conda_env.yml
 git add .
 git commit -m $1
 git push
