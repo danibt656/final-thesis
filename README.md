@@ -1,5 +1,5 @@
-# Trabajo fin de grado
+# Final Thesis
 
 > Daniel Barahona Martin
 
-Este repositorio contiene el código y los cuadernos de Jupyter usados durante el desarrollo del TFG.
+This repo contains both the code & the notebooks used during the development of my final thesis in Machine Learning & Computer Vision.
