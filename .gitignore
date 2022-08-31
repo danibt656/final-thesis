@@ -6,3 +6,6 @@ __pycache__/
 src/.ipynb_checkpoints/
 
 src/data/
+
+data/UTKFace
+data/UTKFace.tar.gz
