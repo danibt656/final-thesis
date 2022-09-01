@@ -7,5 +7,9 @@ src/.ipynb_checkpoints/
 
 src/data/
 
+notebooks/model_checkpoint
+notebooks/*.pth
+
 data/UTKFace
 data/UTKFace.tar.gz
+
