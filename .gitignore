@@ -13,3 +13,5 @@ notebooks/*.pth
 data/UTKFace
 data/UTKFace.tar.gz
 
+utkface/model_checkpoint
+utkface/*.pth
