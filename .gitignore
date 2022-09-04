@@ -12,6 +12,7 @@ notebooks/*.pth
 
 data/UTKFace
 data/UTKFace.tar.gz
+data/age_gender.csv
 
 utkface/model_checkpoint
 utkface/*.pth
