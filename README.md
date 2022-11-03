@@ -1,4 +1,6 @@
-# Final Thesis
+# FICAR
+
+## *Fuzzy Imbalance Consensus Automated Reductor*
 
 > Daniel Barahona Martin
 

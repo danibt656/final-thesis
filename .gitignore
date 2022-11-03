@@ -5,7 +5,7 @@ __pycache__/
 .ipynb_checkpoints/
 src/.ipynb_checkpoints/
 
-src/data/
+gender_clf/data/
 
 notebooks/model_checkpoint
 notebooks/*.pth
@@ -16,3 +16,7 @@ data/age_gender.csv
 
 utkface/model_checkpoint
 utkface/*.pth
+
+celeba/CelebA
+
+resnet_ffceloss/mnist
