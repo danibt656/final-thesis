@@ -14,8 +14,8 @@ USE_GPU = True
 EPOCHS = 5
 
 if __name__ == '__main__':
-    #model = torchvision.models.resnet50()
-    model = cnnModel()
+    model = torchvision.models.resnet50()
+    # model = cnnModel()
 
     # Replace final fully connected layer to suite problem
     model.fc = torch.nn.Sequential(
