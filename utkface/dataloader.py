@@ -12,21 +12,12 @@ from torchvision import transforms
 from skimage.io import imread
 from sklearn.model_selection import train_test_split
 
-
-BATCH_SIZE = 64
-
-
-dataset_folder_name = '../data/UTKFace/Images'
-
-TRAIN_TEST_SPLIT = 0.7
-IM_WIDTH = IM_HEIGHT = 200
-
 dataset_dict = {
     'race_id': {
-        0: 'white', 
-        1: 'black', 
-        2: 'asian', 
-        3: 'indian', 
+        0: 'white',
+        1: 'black',
+        2: 'asian',
+        3: 'indian',
         4: 'others'
     },
     'gender_id': {
@@ -35,132 +26,155 @@ dataset_dict = {
     }
 }
 
-dataset_dict['gender_alias'] = dict((g, i) for i, g in dataset_dict['gender_id'].items())
-dataset_dict['race_alias'] = dict((g, i) for i, g in dataset_dict['race_id'].items())
+dataset_dict['gender_alias'] = dict(
+  (g, i) for i, g in dataset_dict['gender_id'].items())
+dataset_dict['race_alias'] = dict((g, i)
+                                  for i, g in dataset_dict['race_id'].items())
 
 
 def parse_dataset(dataset_path, ext='jpg'):
-    """
-    Used to extract information about our dataset. It iterates over all images and return a DataFrame with
-    the data (age, gender and sex) of all files.
-    """
-    def parse_info_from_file(path):
-        """
-        Parse information from a single file
-        """
-        try:
-            filename = os.path.split(path)[1]
-            filename = os.path.splitext(filename)[0]
-            age, gender, race, _ = filename.split('_')
+  """
+  Usado para extraer info del dataset UTKFace
 
-            return int(age), dataset_dict['gender_id'][int(gender)], dataset_dict['race_id'][int(race)]
-        except Exception as ex:
-            return None, None, None
+  Args:
+    dataset_path: Directorio con las imagenes en el formato indicado
+    ext: Extension (formato) de las imagenes (jpg, png...)
+  
+  Return:
+    DataFrame con (age, gender, race) de todos los ficheros
+  """
+  def parse_info_from_file(path):
+    try:
+      filename = os.path.split(path)[1]
+      filename = os.path.splitext(filename)[0]
+      age, gender, race, _ = filename.split('_')
 
-    files = glob.glob(os.path.join(dataset_path, "*.%s" % ext))
+      return int(age), dataset_dict['gender_id'][int(gender)], dataset_dict['race_id'][int(race)]
+    except Exception as ex:
+      return None, None, None
 
-    records = []
-    for file in files:
-        info = parse_info_from_file(file)
-        records.append(info)
+  files = glob.glob(os.path.join(dataset_path, "*.%s" % ext))
 
-    df = pd.DataFrame(records)
-    df['file'] = files
-    df.columns = ['age', 'gender', 'race', 'file']
-    df = df.dropna()
+  records = []
+  for file in files:
+    info = parse_info_from_file(file)
+    records.append(info)
 
-    return df
+  df = pd.DataFrame(records)
+  df['file'] = files
+  df.columns = ['age', 'gender', 'race', 'file']
+  df = df.dropna()
+
+  return df
 
 
 class Dataset(torch.utils.data.Dataset):
+  """
+  Clase del dataset. Carga las imagenes, hace las transformaciones, y carga sus correspondientes etiquetas
+  """
+
+  def __init__(self, df, img_dir, transform=None):
     """
-    This is our custom dataset class which will load the images, perform transforms on them,
-    and load their corresponding labels.
+    Args:
+      df: DataFrame con la info del dataset
+      img_dir: Directorio con las imagenes
+      transform: Pipeline de transformaciones a aplicar a las imagenes
     """
-    
-    def __init__(self, df, img_dir, transform=None):
-        self.df = df
-        self.img_dir = img_dir
-        self.images = [os.path.join(img_dir, f) for f in os.listdir(img_dir) if f.endswith(".jpg")]
-        self.transform = transform
-        
-    def __getitem__(self, idx):
-        #print(f'#{idx}...', end='')
-        if idx >= self.df.shape[0]:
-            idx = self.df.shape[0]-1
-        img_path = self.df.iloc[idx]['file']
-#         print("img_path:", img_path)
-        #print('OK')
-        img = imread(img_path)
-        
-        if self.transform:
-            img = self.transform(img)
-        
-        sample = {
-            "image": img,
-        }
-        sample["gender"] = dataset_dict['gender_alias'][self.df.iloc[idx]["gender"]]
-#        sample["id"] = self.df.loc[idx, "id"]
-        return sample
-    
-    def __len__(self):
-        try:
-            return self.df.shape[0]
-        except AttributeError:
-            return len(self.images)
+    self.df = df
+    self.img_dir = img_dir
+    self.transform = transform
+    self.images = [os.path.join(img_dir, f) for f in os.listdir(img_dir) if f.endswith(".jpg")]
+
+  def __getitem__(self, idx):
+    # print(f'#{idx}...', end='')
+    if idx >= self.df.shape[0]:
+      idx = self.df.shape[0] - 1
+    img_path = self.df.iloc[idx]['file']
+    print("img_path:", img_path)
+    # print('OK')
+    img = imread(img_path)
+
+    if self.transform:
+      img = self.transform(img)
+
+    sample = {
+        "image": img,
+    }
+    sample["gender"] = dataset_dict['gender_alias'][self.df.iloc[idx]["gender"]]
+    return sample
+
+  def __len__(self):
+    try:
+      return self.df.shape[0]
+    except AttributeError:
+      return len(self.images)
 
 #################################################################################################
 
-df = parse_dataset(dataset_folder_name)
+class UTKFaceDS():
+  """
+  Clase para el dataset especifico (UTKFace)
 
-train_indices, test_indices = train_test_split(df.index, test_size=0.25)
+  Attrs:
+    df: DataFrame
+    dataset: Objeto de clase Dataset con la info general
+    dataloaders: Dict con los dataloaders de Train y Test
+  """
 
-transform_pipe = transforms.Compose([
-    transforms.ToPILImage(), # Convert np array to PILImage
+  def __init__(self,
+              dataset_folder_name="../data/UTKFace/Images",
+              model_res=(224, 224),
+              batch_size=64,
+              test_size=0.3
+              ):
+    """
+    Args:
+      dataset_folder_name: directorio con las imagenes del dataset
+      model_res: Resolucion aceptada por el modelo de vision artificial. Por defecto 224x224 px (ResNet)
+      batch_size: Tamaño de los chunks que devuelven los dataloaders
+      test_size: Porcentaje sobre el total de datos que representan los datos de test, Por defecto 30% = 0.3
+    """
+    self.df = parse_dataset(dataset_folder_name)
+    train_indices, test_indices = train_test_split(self.df.index, test_size=test_size)
 
-    # Resize image to 224 x 224 as required by most vision models
-    transforms.Resize(
-        size=(224, 224)
-    ),
+    transform_pipe = transforms.Compose([
+        transforms.ToPILImage(),  # Convertir array de numpy a imagen de PIL
+        # Resize a la resolucion requerida por el modelo
+        transforms.Resize(
+            size=model_res
+        ),
+        transforms.ToTensor(),
+        transforms.Normalize(
+            mean=[0.485, 0.456, 0.406],
+            std=[0.229, 0.224, 0.225]
+        )
+    ])
 
-    # Convert PIL image to tensor with image values in [0, 1]
-    transforms.ToTensor(),
-
-    transforms.Normalize(
-        mean=[0.485, 0.456, 0.406],
-        std=[0.229, 0.224, 0.225]
+    self.dataset = Dataset(
+        df=self.df,
+        img_dir=dataset_folder_name,
+        transform=transform_pipe
     )
-])
 
-dataset = Dataset(
-    df=df,
-    img_dir="../data/UTKFace/Images/",
-    transform=transform_pipe
-)
-
-# The training dataset loader will randomly sample from the train samples
-train_loader = torch.utils.data.DataLoader(
-    dataset,
-    batch_size=BATCH_SIZE,
-    sampler=torch.utils.data.SubsetRandomSampler(
-        train_indices
+    # The training dataset loader will randomly sample from the train samples
+    _train_loader = torch.utils.data.DataLoader(
+        self.dataset,
+        batch_size=batch_size,
+        sampler=torch.utils.data.SubsetRandomSampler(train_indices)
+        #     shuffle=True,
+        #     num_workers=8
     )
-#     shuffle=True,
-#     num_workers=8
-)
 
-# The testing dataset loader will randomly sample from the test samples
-test_loader = torch.utils.data.DataLoader(
-    dataset,
-    batch_size=64,
-    sampler=torch.utils.data.SubsetRandomSampler(
-        test_indices
+    # The testing dataset loader will randomly sample from the test samples
+    _test_loader = torch.utils.data.DataLoader(
+        self.dataset,
+        batch_size=batch_size,
+        sampler=torch.utils.data.SubsetRandomSampler(test_indices)
+        #     shuffle=True,
+        #     num_workers=8
     )
-#     shuffle=True,
-#     num_workers=8
-)
 
-dataloaders = {
-    "train": train_loader,
-    "test": test_loader
-}
+    self.dataloaders = {
+        "train": _train_loader,
+        "test": _test_loader
+    }
