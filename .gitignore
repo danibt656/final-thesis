@@ -11,11 +11,14 @@ notebooks/model_checkpoint
 notebooks/*.pth
 
 data/UTKFace
+data/MNIST
+data/MNISTjpg
+data/MNISTjpg.zip
 data/UTKFace.tar.gz
 data/age_gender.csv
 
-utkface/model_checkpoint
-utkface/*.pth
+src/model_checkpoint
+src/*.pth
 
 celeba/CelebA
 

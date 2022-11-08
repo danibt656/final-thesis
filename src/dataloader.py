@@ -14,7 +14,6 @@ from skimage.io import imread
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, default_collate
 
-#################################################################################################
 
 dataset_dict = {
     'race_id': {
@@ -33,10 +32,47 @@ dataset_dict = {
 dataset_dict['gender_alias'] = dict((g, i) for i, g in dataset_dict['gender_id'].items())
 dataset_dict['race_alias'] = dict((g, i) for i, g in dataset_dict['race_id'].items())
 
+#################################################################################################
+# PARSER METHODS
 
-def parse_dataset(dataset_path, ext='jpg'):
+def parse_utkface(dataset_path, ext='jpg'):
   """
   Usado para extraer info del dataset UTKFace
+
+  Args:
+    dataset_path: Directorio con las imagenes en el formato indicado
+    ext: Extension (formato) de las imagenes (jpg, png...)
+
+  Return:
+    DataFrame con (age, gender, race) de todos los ficheros
+  """
+  def parse_info_from_file(path):
+    try:
+      filename = os.path.split(path)[1]
+      filename = os.path.splitext(filename)[0]
+      age, gender, race, _ = filename.split('_')
+
+      return int(age), dataset_dict['gender_id'][int(gender)], dataset_dict['race_id'][int(race)]
+    except Exception as ex:
+      return None, None, None
+
+  files = glob.glob(os.path.join(dataset_path, "*.%s" % ext))
+
+  records = []
+  for file in files:
+    info = parse_info_from_file(file)
+    records.append(info)
+
+  df = pd.DataFrame(records)
+  df['file'] = files
+  df.columns = ['age', 'gender', 'race', 'file']
+  df = df.dropna()
+
+  return df
+
+def parse_mnist(dataset_path, ext='jpg'):
+  """
+  Usado para extraer info del dataset MNIST
 
   Args:
     dataset_path: Directorio con las imagenes en el formato indicado
@@ -144,6 +180,7 @@ class UTKFaceDS():
 
   def __init__(self,
                dataset_folder_name="../data/UTKFace/Images",
+               parse_method=None,
                model_res=(224, 224),
                batch_size=64,
                test_size=0.3
@@ -155,7 +192,11 @@ class UTKFaceDS():
       batch_size: Tamaño de los chunks que devuelven los dataloaders
       test_size: Porcentaje sobre el total de datos que representan los datos de test, Por defecto 30% = 0.3
     """
-    self.df = parse_dataset(dataset_folder_name)
+    if parse_method is None:
+      print('=>ERROR: No parser method provided for dataset!')
+      exit(1)
+
+    self.df = parse_method(dataset_folder_name)
     train_indices, test_indices = train_test_split(
       self.df.index, test_size=test_size)
 
