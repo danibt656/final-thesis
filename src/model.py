@@ -52,9 +52,16 @@ class ResNetModel():
 
     Args:
       dataloaders: Dict con los dataloaders de Train y Test
+
+    Return:
+      Estadisticas del proceso de entrenamiento
     """
     best_model_wts = copy.deepcopy(self.model.state_dict())
     best_acc = 0.0
+    batch_epochs = 1
+    accuracies = []
+    losses = []
+
     for i in tqdm(range(self.n_epochs), desc="Training Epochs: "):
       # Entrenar el modelo
       self.model.train()
@@ -86,13 +93,13 @@ class ResNetModel():
           correct_sum += num_corrects
 
           # Print batch statistics every 50 batches
+          batch_loss = float(loss_sum) / float(samples)
+          batch_acc = float(correct_sum) / float(samples)
+          batch_epochs += 1
+          losses.append(batch_loss)
+          accuracies.append(batch_acc)
           if j % 50 == 49:
-            print("E{}:B{} - loss: {}, acc: {}".format(
-                i + 1,
-                j + 1,
-                float(loss_sum) / float(samples),
-                float(correct_sum) / float(samples)
-            ))
+            print(f"E{i + 1}:B{j + 1} - loss: {batch_loss}, acc: {batch_acc}")
 
       # Estadisticas de la epoca
       epoch_acc = float(correct_sum) / float(samples)
@@ -104,6 +111,8 @@ class ResNetModel():
         best_acc = epoch_acc
         best_model_wts = copy.deepcopy(self.model.state_dict())
         torch.save(best_model_wts, "saves/resnet50.pth")
+    
+    return batch_epochs, accuracies, losses
   
   
   def predict(self, dataloaders, state_dict_file="saves/resnet50.pth", n_batches=None):

@@ -15,7 +15,8 @@ print('####################################################')
 print('          FIT')
 print('####################################################')
 
-resnet.fit(data.dataloaders)
+# Con el output podemos hacer plots de loss y accuracy frente al batch de cada epoca
+batch_epochs, accuracies, losses = resnet.fit(data.dataloaders)
 
 print('####################################################')
 print('          PREDICT')
