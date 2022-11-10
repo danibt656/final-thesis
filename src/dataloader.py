@@ -79,17 +79,17 @@ def parse_mnist(dataset_path, ext='jpg'):
     ext: Extension (formato) de las imagenes (jpg, png...)
 
   Return:
-    DataFrame con (age, gender, race) de todos los ficheros
+    DataFrame con (num,) de todos los ficheros
   """
   def parse_info_from_file(path):
     try:
       filename = os.path.split(path)[1]
       filename = os.path.splitext(filename)[0]
-      age, gender, race, _ = filename.split('_')
+      num, _ = filename.split('_')
 
-      return int(age), dataset_dict['gender_id'][int(gender)], dataset_dict['race_id'][int(race)]
+      return int(num)
     except Exception as ex:
-      return None, None, None
+      return None
 
   files = glob.glob(os.path.join(dataset_path, "*.%s" % ext))
 
@@ -100,7 +100,7 @@ def parse_mnist(dataset_path, ext='jpg'):
 
   df = pd.DataFrame(records)
   df['file'] = files
-  df.columns = ['age', 'gender', 'race', 'file']
+  df.columns = ['num', 'file']
   df = df.dropna()
 
   return df
@@ -146,6 +146,40 @@ class Dataset(torch.utils.data.Dataset):
     # race = dataset_dict['race_alias'][self.df.iloc[idx]["race"]]
     # Labels del tipo genero-raza
     sample["label"] = gender
+    return sample
+
+  def __len__(self):
+    try:
+      return self.df.shape[0]
+    except AttributeError:
+      return len(self.images)
+
+
+class DatasetMNIST(torch.utils.data.Dataset):
+
+  def __init__(self, df, img_dir, transform=None):
+    """
+    Args:
+      df: DataFrame con la info del dataset
+      img_dir: Directorio con las imagenes
+      transform: Pipeline de transformaciones a aplicar a las imagenes
+    """
+    self.df = df
+    self.img_dir = img_dir
+    self.transform = transform
+    self.images = [os.path.join(img_dir, f) for f in os.listdir(img_dir) if f.endswith(".jpg")]
+
+  def __getitem__(self, idx):
+    if idx >= self.df.shape[0]:
+      idx = self.df.shape[0] - 1
+    img_path = self.df.iloc[idx]['file']
+    img = imread(img_path)
+    if self.transform:
+      img = self.transform(img)
+    sample = {
+      "image": img,
+    }
+    sample["label"] = self.df.iloc[idx]["num"]
     return sample
 
   def __len__(self):
@@ -214,6 +248,80 @@ class UTKFaceDS():
     ])
 
     self.dataset = Dataset(
+      df=self.df,
+      img_dir=dataset_folder_name,
+      transform=transform_pipe
+    )
+
+    # The training dataset loader will randomly sample from the train samples
+    train_loader = DataLoader(
+      self.dataset,
+      batch_size=batch_size,
+      sampler=torch.utils.data.SubsetRandomSampler(train_indices),
+      num_workers=8,
+      collate_fn = bias_collate,
+    )
+
+    # The testing dataset loader will randomly sample from the test samples
+    test_loader = DataLoader(
+      self.dataset,
+      batch_size=batch_size,
+      sampler=torch.utils.data.SubsetRandomSampler(test_indices),
+      num_workers=8,
+    )
+
+    self.dataloaders = {
+      "train": train_loader,
+      "test": test_loader
+    }
+
+
+class MNISTDS():
+  """
+  Clase para el dataset especifico (MNIST)
+
+  Attrs:
+    df: DataFrame
+    dataset: Objeto de clase Dataset con la info general
+    dataloaders: Dict con los dataloaders de Train y Test
+  """
+
+  def __init__(self,
+               dataset_folder_name="../data/MNIST/Images",
+               parse_method=None,
+               model_res=(224, 224),
+               batch_size=64,
+               test_size=0.3
+               ):
+    """
+    Args:
+      dataset_folder_name: directorio con las imagenes del dataset
+      model_res: Resolucion aceptada por el modelo de vision artificial. Por defecto 224x224 px (ResNet)
+      batch_size: Tamaño de los chunks que devuelven los dataloaders
+      test_size: Porcentaje sobre el total de datos que representan los datos de test, Por defecto 30% = 0.3
+    """
+    if parse_method is None:
+      print('=>ERROR: No parser method provided for dataset!')
+      exit(1)
+
+    self.df = parse_method(dataset_folder_name)
+    train_indices, test_indices = train_test_split(
+      self.df.index, test_size=test_size)
+
+    transform_pipe = transforms.Compose([
+      transforms.ToPILImage(),  # Convertir array de numpy a imagen de PIL
+      # Resize a la resolucion requerida por el modelo
+      transforms.Resize(
+        size=model_res
+      ),
+      transforms.ToTensor(),
+      transforms.Normalize(
+        mean=[0.5],
+        std=[0.5]
+      )
+    ])
+
+    self.dataset = DatasetMNIST(
       df=self.df,
       img_dir=dataset_folder_name,
       transform=transform_pipe
