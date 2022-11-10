@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from dataloader import MNISTDS, parse_mnist
 from model import ResNetModel
+import matplotlib.pyplot as plt
 
 data = MNISTDS(dataset_folder_name="../data/MNIST/Images",
              parse_method=parse_mnist,
@@ -17,6 +18,20 @@ print('####################################################')
 
 # Con el output podemos hacer plots de loss y accuracy frente al batch de cada epoca
 batch_epochs, accuracies, losses = resnet.fit(data.dataloaders)
+# Accuracy plot
+plt.plot(batch_epochs, accuracies, 'r', label='Accuracy')
+plt.title('Accuracy')
+plt.xlabel('Batch-Epoch')
+plt.ylabel('Accuracy (%)')
+plt.legend()
+plt.show()
+# Loss plot
+plt.plot(batch_epochs, losses, 'b', label='Loss')
+plt.title('Loss')
+plt.xlabel('Batch-Epoch')
+plt.ylabel('Loss (%)')
+plt.legend()
+plt.show()
 
 print('####################################################')
 print('          PREDICT')
