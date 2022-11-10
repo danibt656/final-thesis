@@ -18,7 +18,7 @@ data/UTKFace.tar.gz
 data/age_gender.csv
 
 src/model_checkpoint
-src/*.pth
+src/saves/*.pth
 
 celeba/CelebA
 
