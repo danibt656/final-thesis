@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 @author: Daniel Barahona
-Modelos de redes convolucionales
 """
 import numpy as np
 from tqdm import tqdm
 import copy
 import torch
 import torchvision
+from cnn import ConvNet
 
 
 class ResNetModel():
@@ -20,22 +20,23 @@ class ResNetModel():
       n_epochs: Numero de epocas de entrenamiento
       use_gpu: Si usar gpu para ejecutar el modelo o no
     """
-    model = torchvision.models.resnet50()
-    model.conv1 = torch.nn.Conv2d(
-      in_channels=in_ch,
-      out_channels=64,
-      kernel_size=(7,7),
-      stride=(2,2),
-      padding=(3,3),
-      bias=False,
-    )
-    model.fc = torch.nn.Sequential(
-      torch.nn.Linear(
-        in_features=2048,
-        out_features=out_f  # Output size
-      ),
-      torch.nn.Softmax(dim=1)
-    )
+    # model = torchvision.models.resnet50()
+    # model.conv1 = torch.nn.Conv2d(
+    #   in_channels=in_ch,
+    #   out_channels=64,
+    #   kernel_size=(7,7),
+    #   stride=(2,2),
+    #   padding=(3,3),
+    #   bias=False,
+    # )
+    # model.fc = torch.nn.Sequential(
+    #   torch.nn.Linear(
+    #     in_features=2048,
+    #     out_features=out_f  # Output size
+    #   ),
+    #   torch.nn.Softmax(dim=1)
+    # )
+    model = ConvNet(in_ch, out_f)
     if use_gpu:
       model = model.cuda()
 
