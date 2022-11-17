@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 data = MNISTDS(dataset_folder_name="../data/MNIST/Images",
              parse_method=parse_mnist,
-             model_res=(224, 224),
+             model_res=(227, 227),
              batch_size=64,
              test_size=0.3
             )
