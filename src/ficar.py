@@ -14,8 +14,16 @@ class FICAR(object):
 
   Attrs:
     m: Numero de clases del problema de clasificacion
+    class_names: Lista con los nombres de las clases asignadas por fila/columna:
     predictors: Matriz de clasificadores para el esquema de descomposicion
     decisions: Matriz con las decisiones de los clasificadores para una cierta instancia (probabilidades)
+
+    m x m:                  class_names[0]  class_names[1]    ...
+            class_names[0]        -             1 vs. 0       ...
+
+            class_names[1]       0 vs. 1           -          ...
+
+            ....                   ...             ...         -
   """
 
   def __init__(self, n_classes=2, class_names=[]):
@@ -41,7 +49,13 @@ class FICAR(object):
           continue
         self.predictors[r, c] = DummyModel()
 
-  def train(self):
+  def train(self, dataloaders):
+    """
+    Entrena el modelo con los datos dados
+
+    Args:
+      dataloaders: Dict con los dataloaders de Train y Test
+    """
     pass
 
   def predict(self, instance):
