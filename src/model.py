@@ -6,6 +6,7 @@ import numpy as np
 from tqdm import tqdm
 import copy
 import torch
+from torch.optim.lr_scheduler import StepLR
 import torchvision
 from cnn import ConvNet
 
@@ -20,33 +21,35 @@ class ResNetModel():
       n_epochs: Numero de epocas de entrenamiento
       use_gpu: Si usar gpu para ejecutar el modelo o no
     """
-    # model = torchvision.models.resnet50()
-    # model.conv1 = torch.nn.Conv2d(
-    #   in_channels=in_ch,
-    #   out_channels=64,
-    #   kernel_size=(7,7),
-    #   stride=(2,2),
-    #   padding=(3,3),
-    #   bias=False,
-    # )
-    # model.fc = torch.nn.Sequential(
-    #   torch.nn.Linear(
-    #     in_features=2048,
-    #     out_features=out_f  # Output size
-    #   ),
-    #   torch.nn.Softmax(dim=1)
-    # )
-    model = ConvNet(in_ch, out_f)
+    model = torchvision.models.resnet50(pretrained=True)
+    model.conv1 = torch.nn.Conv2d(
+      in_channels=in_ch,
+      out_channels=64,
+      kernel_size=(7, 7),
+      stride=(2, 2),
+      padding=(3, 3),
+      bias=False,
+    )
+    model.fc = torch.nn.Sequential(
+      torch.nn.Linear(
+        in_features=model.fc.in_features,
+        out_features=out_f  # Output size
+      ),
+      torch.nn.Softmax(dim=1)
+    )
+    # model = ConvNet(in_ch, out_f)
     if use_gpu:
       model = model.cuda()
 
     self.model = model
     self.use_gpu = use_gpu
     self.n_epochs = n_epochs
-    self.optimizer = torch.optim.Adam(model.parameters())
+    self.optimizer = torch.optim.SGD(
+      model.parameters(), lr=0.001, momentum=0.9)
     self.criterion = torch.nn.CrossEntropyLoss()
+    # Decay LR by a factor of 0.1 every 7 epochs
+    self.scheduler = StepLR(self.optimizer, step_size=7, gamma=0.1)
 
-  
   def fit(self, dataloaders):
     """
     Entrena el modelo con los datos dados
@@ -90,7 +93,8 @@ class ResNetModel():
           # Multiplicar por tam de Batch porque loss es la loss media del Batch
           loss_sum += loss.item() * X.shape[0]
           samples += X.shape[0]
-          num_corrects = torch.sum((y >= 0.5).float() == targets.view(-1, 1).float())
+          num_corrects = torch.sum(
+            (y >= 0.5).float() == targets.view(-1, 1).float())
           correct_sum += num_corrects
 
           # Print batch statistics every 50 batches
@@ -102,6 +106,8 @@ class ResNetModel():
           if j % 50 == 49:
             print(f"E{i + 1}:B{j + 1} - loss: {batch_loss}, acc: {batch_acc}")
 
+      self.scheduler.step()
+
       # Estadisticas de la epoca
       epoch_acc = float(correct_sum) / float(samples)
       epoch_loss = float(loss_sum) / float(samples)
@@ -112,10 +118,9 @@ class ResNetModel():
         best_acc = epoch_acc
         best_model_wts = copy.deepcopy(self.model.state_dict())
         torch.save(best_model_wts, "saves/resnet50.pth")
-    
+
     return batch_epochs, accuracies, losses
-  
-  
+
   def predict(self, dataloaders, state_dict_file="saves/resnet50.pth", n_batches=None):
     """
     Realiza predicciones en base al modelo entrenado previamente
@@ -143,15 +148,27 @@ class ResNetModel():
       with torch.set_grad_enabled(False):
         y_pred = torch.squeeze(self.model(X))
         predictions = np.append(predictions, y_pred.cpu().numpy())
-      
-      if n_batches is not None and bi+1 == n_batches:
+
+      if n_batches is not None and bi + 1 == n_batches:
         break
 
     m_err = self.mean_error(ground_truth, predictions)
     print(f'==> ERROR MEDIO: {m_err}')
-    
 
-  def mean_error(self,datos,pred):
+  def mean_error(self, datos, pred):
     if len(datos) != len(pred):
-      print(f'==> Longitudes no coinciden! datos:{len(datos)}, pred:{len(pred)}')
+      print(
+        f'==> Longitudes no coinciden! datos:{len(datos)}, pred:{len(pred)}')
     return len([i for i in range(len(datos)) if datos[i] != pred[i]]) / len(datos)
+
+
+class DummyModel(object):
+
+  def __init__(self):
+    super(DummyModel, self).__init__()
+
+  def fit(self):
+    return "Fit"
+  
+  def predict(self, instance, state_dict_file="saves/resnet50.pth"):
+    return np.random.uniform(low=0, high=1)
