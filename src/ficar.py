@@ -47,7 +47,7 @@ class FICAR(object):
       for c in range(r + 1, self.m):
         if r == c:
           continue
-        self.predictors[r, c] = DummyModel()
+        self.predictors[r, c] = DummyModel((self.class_names[r], self.class_names[c]))
 
   def train(self, dataloaders):
     """
@@ -56,7 +56,13 @@ class FICAR(object):
     Args:
       dataloaders: Dict con los dataloaders de Train y Test
     """
-    pass
+    for r in range(self.m):
+      for c in range(r + 1, self.m):
+        if r == c:
+          continue
+        print(f'P({r},{c})-> ', end='')
+        self.predictors[r, c].fit()
+        print('')
 
   def predict(self, instance):
     """
@@ -76,7 +82,8 @@ class FICAR(object):
       for c in range(r + 1, self.m):
         if r == c:
           continue
-        self.decisions[r, c] = self.predictors[r, c].predict(instance)  # r_ij = Probabilidad de Ci frente a Cj
+        # r_ij = Probabilidad de Ci frente a Cj
+        self.decisions[r, c] = self.predictors[r, c].predict(instance)
         # r_ji = 1 - r_ij (Cj frente a Ci)
         self.decisions[c, r] = 1 - self.decisions[r, c]
 
@@ -96,7 +103,7 @@ class FICAR(object):
     """
     max_i = decision_mat.argmax() // decision_mat.shape[0]
     max_j = decision_mat.argmax() % decision_mat.shape[0]
-    print(f'ARGMAX IN ({max_i},{max_j})')
+    
     assert max_i < self.m
 
     return self.class_names[max_j]

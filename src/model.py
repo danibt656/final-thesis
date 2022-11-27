@@ -164,11 +164,12 @@ class ResNetModel():
 
 class DummyModel(object):
 
-  def __init__(self):
+  def __init__(self, class_pair):
     super(DummyModel, self).__init__()
+    self.class_pair = class_pair
 
   def fit(self):
-    return "Fit"
+    print(f"Fit with pair {self.class_pair}", end='')
   
   def predict(self, instance, state_dict_file="saves/resnet50.pth"):
     return np.random.uniform(low=0, high=1)
