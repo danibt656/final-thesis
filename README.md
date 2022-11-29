@@ -2,6 +2,8 @@
 
 ## *Fuzzy Imbalance Consensus Automated Reductor*
 
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/danibt656/Mapache?style=flat-square)
+
 > Daniel Barahona Martin
 
 This repo contains both the code & the notebooks used during the development of my final thesis in Machine Learning & Computer Vision.
