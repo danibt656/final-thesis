@@ -9,6 +9,7 @@ gender_clf/data/
 
 notebooks/model_checkpoint
 notebooks/*.pth
+notebooks/resnetUTK*
 
 data/UTKFace
 data/MNIST
