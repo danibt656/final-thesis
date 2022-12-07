@@ -2,7 +2,7 @@
 
 ## *Fuzzy Imbalance Consensus Automated Reductor*
 
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/danibt656/Mapache?style=flat-square)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/danibt656/final-thesis?style=flat-square)
 
 > Daniel Barahona Martin
 
