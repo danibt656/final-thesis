@@ -12,6 +12,7 @@ notebooks/*.pth
 notebooks/resnetUTK*
 
 data/UTKFace
+data/UTKFace.zip
 data/MNIST
 data/MNISTjpg
 data/MNISTjpg.zip
