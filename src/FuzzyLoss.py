@@ -39,19 +39,19 @@ from fuzzylogic.functions import R, S, alpha, triangular
 
 # PYTORCH VERSION
 class FuzzyLoss(torch.nn.CrossEntropyLoss):
-  def __init__(self, gamma, alpha=None, ignore_index=-100, reduction='mean'):
-    super().__init__(weight=alpha, ignore_index=ignore_index, reduction='none')
-    self.reduction = reduction
-    self.gamma = gamma
+    def __init__(self, gamma, alpha=None, ignore_index=-100, reduction='mean'):
+        super().__init__(weight=alpha, ignore_index=ignore_index, reduction='none')
+        self.reduction = reduction
+        self.gamma = gamma
 
-  def forward(self, input_, target):
-    cross_entropy = super().forward(input_, target)
-    target = target * (target != self.ignore_index).long()
-    input_prob = torch.gather(F.softmax(input_, 1), 1, target.type(torch.int64))
-    loss = torch.pow(1 - input_prob, self.gamma) * cross_entropy 
-    return torch.mean(loss) if self.reduction == 'mean' \
-                            else torch.sum(loss) if self.reduction == 'sum' \
-                            else loss
+    def forward(self, input_, target):
+        cross_entropy = super().forward(input_, target)
+        target = target * (target != self.ignore_index).long()
+        input_prob = torch.gather(F.softmax(input_, 1), 1, F.one_hot(target.type(torch.int64)))
+        loss = torch.pow(1 - input_prob, self.gamma) * cross_entropy 
+        return torch.mean(loss) if self.reduction == 'mean' \
+                                else torch.sum(loss) if self.reduction == 'sum' \
+                                else loss
 
 
 def inference():
