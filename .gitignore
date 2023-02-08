@@ -3,7 +3,6 @@ env/
 __pycache__/
 
 .ipynb_checkpoints/
-src/.ipynb_checkpoints/
 
 gender_clf/data/
 
@@ -19,9 +18,12 @@ data/MNISTjpg.zip
 data/UTKFace.tar.gz
 data/age_gender.csv
 
+src/.ipynb_checkpoints/
 src/model_checkpoint
-src/saves/*.pth
+src/saves/*.pt
+src/lightning_logs/
 
 celeba/CelebA
 
 resnet_ffceloss/mnist
+resnet_ffceloss/lightning_logs/

@@ -4,8 +4,63 @@
 """
 import numpy as np
 import threading
+import matplotlib.pyplot as plt
 
 from model import DummyModel
+import torch
+from torchvision import datasets, transforms
+
+
+IMG_SIZE = 224
+BATCH_SIZE = 32
+DEGREES = 15
+ROOT_I = 'Images'
+gender_rev = {0: 'male', 1: 'female'}
+
+def get_dataloaders_from_path(path):
+  """ Wrapper for dataloader-from-directory logic
+  """
+
+  data_transforms = {
+    'train': transforms.Compose([
+      transforms.RandomResizedCrop(IMG_SIZE),
+      transforms.RandomHorizontalFlip(),
+      transforms.ToTensor(),
+      transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ]),
+    'val': transforms.Compose([
+      transforms.Resize(IMG_SIZE),
+      transforms.CenterCrop(IMG_SIZE),
+      transforms.ToTensor(),
+      transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ]),
+  }
+
+  data_dir = path
+  image_datasets = {x: datasets.ImageFolder(data_dir+x,data_transforms[x]) for x in ['train', 'val']}
+
+  dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x],\
+                                                batch_size=BATCH_SIZE,\
+                                                shuffle=True,\
+                                                num_workers=4)\
+                  for x in ['train', 'val']}
+
+  dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
+  class_names = [c for c in image_datasets['train'].classes if c != ROOT_I]
+
+  return dataloaders, dataset_sizes, class_names
+
+
+def plot_images_sample(dataloader):
+  """ Plot 4 images from desired dataloader (train or val) """
+  images, labels = next(iter(dataloader))
+  _, axes = plt.subplots(figsize=(16, 4), ncols=4)
+  for ii in range(4):
+      ax = axes[ii]
+      img = images[ii]
+      npimg = img.numpy()
+      ax.imshow(np.transpose(npimg, (1, 2, 0)), interpolation='nearest')
+      ax.set_title(gender_rev[int(labels[ii])])
 
 
 class FICAR(object):

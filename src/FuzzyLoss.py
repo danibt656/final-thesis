@@ -39,7 +39,7 @@ from fuzzylogic.functions import R, S, alpha, triangular
 
 # PYTORCH VERSION
 class FuzzyLoss(torch.nn.CrossEntropyLoss):
-    def __init__(self, gamma, alpha=None, ignore_index=-100, reduction='mean'):
+    def __init__(self, gamma, alpha=None, ignore_index=-100, reduction='mean', class_sizes=[]):
         super().__init__(weight=alpha, ignore_index=ignore_index, reduction='none')
         self.reduction = reduction
         self.gamma = gamma
