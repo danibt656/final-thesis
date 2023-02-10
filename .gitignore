@@ -17,6 +17,7 @@ data/MNISTjpg
 data/MNISTjpg.zip
 data/UTKFace.tar.gz
 data/age_gender.csv
+data/gender_clf/
 
 src/.ipynb_checkpoints/
 src/model_checkpoint
