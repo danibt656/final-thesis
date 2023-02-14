@@ -9,15 +9,17 @@ gender_clf/data/
 notebooks/model_checkpoint
 notebooks/*.pth
 notebooks/resnetUTK*
+notebooks/images/
 
-data/UTKFace
-data/UTKFace.zip
-data/MNIST
-data/MNISTjpg
-data/MNISTjpg.zip
-data/UTKFace.tar.gz
-data/age_gender.csv
-data/gender_clf/
+data/*
+#data/UTKFace
+#data/UTKFace.zip
+#data/MNIST
+#data/MNISTjpg
+#data/MNISTjpg.zip
+#data/UTKFace.tar.gz
+#data/age_gender.csv
+#data/gender_clf/
 
 src/.ipynb_checkpoints/
 src/model_checkpoint

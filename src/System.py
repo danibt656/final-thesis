@@ -6,7 +6,6 @@ import numpy as np
 import threading
 import matplotlib.pyplot as plt
 
-from model import DummyModel
 import torch
 from torchvision import datasets, transforms
 
@@ -29,7 +28,7 @@ def get_dataloaders_from_path(path):
       transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ]),
     'val': transforms.Compose([
-      transforms.Scale(256),
+      transforms.Scale(IMG_SIZE),
       transforms.CenterCrop(IMG_SIZE),
       transforms.ToTensor(),
       transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
@@ -61,6 +60,19 @@ def plot_images_sample(dataloader):
       npimg = img.numpy()
       ax.imshow(np.transpose(npimg, (1, 2, 0)), interpolation='nearest')
       ax.set_title(gender_rev[int(labels[ii])])
+
+
+class DummyModel(object):
+
+  def __init__(self, class_pair):
+    super(DummyModel, self).__init__()
+    self.class_pair = class_pair
+
+  def fit(self):
+    print(f"Fit with pair {self.class_pair}", end='')
+  
+  def predict(self, instance, state_dict_file="saves/resnet50.pth"):
+    return np.random.uniform(low=0, high=1)
 
 
 class FICAR(object):
