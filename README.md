@@ -1,6 +1,4 @@
-# FICAR
-
-## *Fuzzy Imbalance Consensus Automated Reductor*
+# final thesis
 
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/danibt656/final-thesis?style=flat-square)
 
