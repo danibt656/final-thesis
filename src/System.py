@@ -50,6 +50,32 @@ def get_dataloaders_from_path(path):
   return dataloaders, dataset_sizes, class_names
 
 
+def get_dataloaders_for_kfold(path):
+  """ Wrapper for dataloader-from-directory logic for KFOLD
+  """
+
+  data_transforms = transforms.Compose([
+    transforms.RandomSizedCrop(IMG_SIZE),
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+  ])
+
+  data_dir = path
+  image_dataset = datasets.ImageFolder(data_dir,data_transforms)
+
+  dataloaders = {x: torch.utils.data.DataLoader(image_dataset,\
+                                                batch_size=BATCH_SIZE,\
+                                                shuffle=shuf,\
+                                                num_workers=4)\
+                  for x,shuf in [('train', True), ('val', False)]}
+
+  dataset_sizes = {x: len(image_dataset) for x in ['train', 'val']}
+  class_names = [c for c in image_dataset.classes if c != ROOT_I]
+
+  return dataloaders, dataset_sizes, class_names
+
+
 def plot_images_sample(dataloader):
   """ Plot 4 images from desired dataloader (train or val) """
   images, labels = next(iter(dataloader))
