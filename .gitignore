@@ -23,7 +23,7 @@ data/*
 
 src/.ipynb_checkpoints/
 src/model_checkpoint
-src/saves/*.pt
+src/saves/
 src/lightning_logs/
 
 celeba/CelebA
