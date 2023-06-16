@@ -25,6 +25,7 @@ src/.ipynb_checkpoints/
 src/model_checkpoint
 src/saves/
 src/lightning_logs/
+src/grid_search/
 
 celeba/CelebA
 
