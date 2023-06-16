@@ -2,22 +2,14 @@
 """
 @author: Daniel Barahona
 """
-import argparse
-import os
 import random
 import torch
-import torch.nn as nn
 import torch.nn.parallel
-import torch.backends.cudnn as cudnn
-import torch.optim as optim
 import torch.utils.data
 from torchvision import datasets
 import torchvision.transforms as transforms
 from torch.utils.data import Subset
-import torchvision.utils as vutils
 import numpy as np
-from typing import List, Union, Tuple
-
 
 
 # Number of workers for dataloader
