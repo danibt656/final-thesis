@@ -2,7 +2,7 @@
 
 ## Abordando el desbalanceo de clases en el reconocimiento de género en imágenes
 
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/danibt656/final-thesis?style=flat-square)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/danibt656/final-thnesis)
 
 > Daniel Barahona Martin
 
