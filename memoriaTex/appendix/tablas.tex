@@ -1,0 +1,143 @@
+En este apéndice, se muestran las tablas referenciadas durante el proyecto que, debido a sus dimensiones, tienen un mejor lugar aquí.
+
+% -------------------------------------
+%   Resumen papers gender
+% -------------------------------------
+
+% \setlength{\tabcolsep}{0.7mm}
+% %\scriptsize
+% \tiny
+% \begin{table}[h]
+% %\scriptsize
+% \tiny
+%   \caption{Datasets of papers revised for Anonymization tasks}
+%   \label{TB:DATASETS_ANON_SOA}
+%   \setlength{\tabcolsep}{0.7mm}
+%   \begin{tabular}{p{3cm}ccp{3.5cm}cp{2.2cm}}
+%     \hline
+% %  \rotatebox{90}{%
+
+\begin{landscape}
+\begin{table}[Resumen de papers género]{TB:RESUMEN_GENDERCLF}{Resumen del \ac{AC:SOTA} para los \textit{papers} de reconocimiento facial y de género. Cuando un paper da varias métricas para diferentes modelos, se enumeran dichas métricas en el mismo orden. También, si se usan varios datasets, se proporcionan las métricas en orden para todos ellos.}
+  \begin{tabular}{cp{2.5cm}p{4cm}p{4cm}p{4cm}}
+    \hline
+    \textbf{Paper} & \textbf{Dataset} & \textbf{Modelo utilizado} & \textbf{Métrica} & \textbf{Resultados} \\
+    % modelo -> SVM, CNN ...
+    % métrica -> accuracy, f1-score, recall...
+    \hline \hline
+    \cite{vallimeena2019cnn} & FERET & \acs{AC:CNN} & Accuracy & 85.0\%---98.6\% \\
+    \hline
+    \cite{lin2020face} & FEI/SCIEN/Asian Star & ResNet + KNN/SVM/RF/LR & Recognition Rate & 99.2\%, 98.7\% y 97.4\% \\
+    \hline
+    \cite{hiremath2021human} & CASIA & Compendio de técnicas & Accuracy & 78.0\% y 90.0\% \\
+    \hline
+    \cite{tianyu2018human} & FERET & MB-LBP+SVM, KNN+SVM y PCA+LDA+SVM & Accuracy & 94.7\% \\
+    \hline
+    \cite{khryashchev2013adaptive} & FERET & SVM & Recognition Rate & 90.8\% \\
+    \hline
+    \cite{poornima2021classification} & Desconocido & SVM, AdaBoost, RF & Accuracy & 96,87\% con RF \\
+    \hline
+    \cite{agbo2019face} & IMDB-WIKI/Adience & SVM + CNN & Accuracy & 89.7\% \\
+    \hline
+    \cite{tuncc2020fuzzy} & No mencionado & Lógica difusa + CNN & Accuracy & 93.0\% \\
+    \hline
+    \cite{wu2020gender} & Adience/Dataset propio & Adaboost + CNN & Selection rate & 98.46\% \\
+    \hline
+    \cite{sumi2021human} & Kaggle/Nottingham Scan & CNN & Accuracy & 95\% (Kaggle) 90\% (NS) \\
+    \hline
+    \cite{dwivedi2019review} & FERET/GENDER-FERET & Accuracy + F1 & 92.4\% \\
+    \hline
+    \cite{raza2018appearance} & PETA & HOG + CNN & Accuracy & 82.0\% \\
+    \hline
+    \cite{agbo2020deeply} & ImageNet/IMDB-WIKI & CNN & Exact accuracy & 96.2\% \\
+    \hline
+    \cite{mzhang2020gender} & ORLDB (propio) & Back-propagation & Accuracy 81.7\% \\
+    \hline
+    \cite{zhang2020gender} & No mencionado & VGG19 (CNN) & Accuracy & 94.0\% \\
+    \hline
+    \cite{garain2021gra_net} & UTKFace/Adience/FG-NET/AFAD/Wikipedia Age & CNN & Accuracy & 99.2\% \\
+    \hline
+    \cite{xu2019hierarchical} & SCUT-FBP & HMTNet & MAE + RMSE + PC & 0.25, 0.33 y 0.88 \\
+    \hline
+    \cite{islam2020human} & IMDB-WIKI/Caltech_Faces & CNN & Accuracy & 92\% y 88\% \\
+    \hline
+    %\cite{yu2020humbi} & HUMBI & CNN & Varios & Varios \\ No tiene que ver con caras
+    \cite{verma2019local} & IITK & SVM + NN + AdaBoost & Accuracy & 97.6\% \\
+    \hline
+    \cite{gurnani2019saf} & Adience/AffectNet & CNN & Accuracy & 83.4\pm1.6\& y 91.8\pm1.2\% \\
+    \hline
+    \cite{loo2018influence} & FERET/MEFD & SVM & Accuracy & Male 96.3\%; Female 92.8\% \\
+    \hline
+    \cite{yilmaz2021evolutionary} & CAS-PEAL/FERET & Mean Error & 0.0 (mejor puntuación) \\
+    \hline
+    \cite{ranjan2017hyperface} & CelebA/LFWA & Region-based CNN & Accuracy & 98.0\% \\
+    \hline
+    \hline
+  \end{tabular}
+\end{table}
+\end{landscape}
+
+% -------------------------------------
+%   Resumen papers bias
+% -------------------------------------
+
+\begin{table}[Resumen de papers género]{TB:RESUMEN_BIAS}{Resumen del \ac{AC:SOTA} para los \textit{papers} de reconocimiento facial y de género. Cuando un paper da varias métricas para diferentes modelos, se enumeran dichas métricas en el mismo orden. También, si se usan varios datasets, se proporcionan las métricas en orden para todos ellos.}
+  \begin{tabular}{cpppppp}
+    \hline
+    \textbf{Paper} & \textbf{Dataset} & \textbf{Algoritmo} & \textbf{Tipo de sesgo} & \textbf{Sesgo} & \textbf{Métrica} & \textbf{Solución} \\
+    % tipo sesgo -> datos/algoritmo
+    % sesgo -> explicacion un poco + detallada
+    \hline \hline
+    \cite{zhao2021lightweight} & FER-2013 y CK+ & \acs{AC:SVM} & Datos & Desbalanceo de clase & Matriz de confusión & > En vez de usar maxima verosimilitud, le damos mayor peso a las categorias con menos muestras, mediante normalización de P(E) a 1. \\
+    \hline
+    \cite{nafi2020addressing} & PlantVillage & \acs{AC:CNN} & Datos & Desbalanceo de clase & Accuracy Precision Recall F1 AUC & Crear un dataset equilibrado mediante técnicas de data-level \\
+    \hline
+    \cite{yilma2021generation} & PlantVillage & \acs{AC:CNN} & Datos & Sesgo en data augmentation & Accuracy & Reducir la distribución de discrepancia entre características entre los datos sintéticos y los datos originales de entrenamiento. \\
+    \hline
+    \cite{chansong2021impacts} & CIFAR-10 & \acs{AC:CNN} & Algoritmo & Sesgo en la creación de particiones para validación & Precision Recall F1 Acc & Hacer validación cruzada con K=10 y un train-test de 80-20 \\
+    \hline
+    \cite{zhong2021improving} & CIFAR-10-LT, ImageNet-LT, Places-LT, iNaturalist 2018 & \acs{AC:CNN} & Datos & Desbalanceo de clase (distribución \textit{long-tailed}) & Accuracy ECE & MiSLAS, Label-aware Smoothing + Shift learning on the batch normalization \\
+    \hline
+    \cite{yan2019joint} & CK+, Oulu-CASIA, MMI, Multi-PIE, TFD & \acs{AC:CNN} & Datos & Sesgo entre imágenes sintéticas e imágenes releas & Accuracy & Utilizar intra-class loss \\
+    \hline
+    \cite{vowels2020nestedvae} & MNIST, SVHN & AutoEncoder (NestedVAE) & Datos & Sesgo de distribución (desbalenceo) y Sesgo cultural o caracterísitcas protegidas (etnia, edad, género) & F1-score & Conseguir Invarianza del dominio NestedVAE \\
+    \hline
+    \cite{han2020toward} & RAF, ExpW y AffectNet & \acs{AC:CNN} & Datos & Múltiples datasets & Accuracy & Utilizar Adaptive Cross Entropy (ACE) como función de pérdida y una arquitectura Cross-Dataset Adaptation (CDA) \\
+    \hline
+    \cite{surapaneni2020exploring} & MET musseum & \acs{AC:CNN} & Datos & Desbalanceo de clase & Accuracy & Pre-filtering, up-sampling, down-sampling \\
+    \hline
+    \cite{jiang2019robust} & RGB-D dataset & \acs{AC:CNN} & Datos & Uneven sampling & Accuracy & Incluyendo atributos al reconocimiento de la cara (edad, género, etnia...) \\
+    \hline
+    \cite{siniosoglou2021unsupervised} & No aplica & \acs{AC:CNN} & Algoritmo & DL model & Fairness Divergence Indicator (FDI) & Mediante una metodología para medir cómo de justo es un modelo pre-entrenado de DL \\
+    \hline
+    \cite{aka2021measuring} & Open Images Dataset & \acs{AC:CNN} & Algoritmo & DL model & Association metrics & Mediante métricas de asociación puede mostrar que etiquetas tienen más sesgo \\
+    \hline
+    \cite{schaaf2021towards} & ImageNet & \acs{AC:CNN} & Datos & Desbalanceo de clase & Relevance Mass Accuracy y Relevance Rank Accuracy & Propone cómo medir el sesgo, no cómo eliminarlo \\
+    \hline
+    \cite{zhang2020towards} & CelebA & \acs{AC:AEDA} & Datos & Desbalanceo de clase & Accuracy & Mediante ataque de adversarios \\
+    \hline
+    \cite{li2019learning} & WebVision & \acs{AC:CNN} & Datos & Desbalanceo de clase & Accuracy & Clústeres de similaridad por cada clase, que luego afectan a una loss function (no supervisado) \\
+    \hline
+    \cite{wadsworth2018achieving} & COMPAS & \acs{AC:CNN} & Datos & Desbalanceo de clase & FPG / FNG & Ataque de adversarios a una red neuronal \\
+    \hline
+    \cite{kafkalias2022bias} & CFD & \acs{AC:CNN} & Datos & Sesgo introducido por los etiquetadores & Matriz de confusión y lograr equilibro de raza, edad y género de los anotadores \\
+    \hline
+    \cite{serna2021insidebias} & MNIST y DiveFace & \acs{AC:CNN} & Algoritmo & Sesgo durante el aprendizaje & Activación de capas intermedias & No proponen solución, pero indican cómo medir el sesgo (mirando la activación de las capas internas de la red) \\
+    \hline
+    \cite{kim2019multiaccuracy} & CelebA & \acs{AC:CNN} & Datos & Desbalanceo de clase & Accuracy & Multiaccuracy Boost con un modelo adicional que "audita" las clases más sesgadas \\
+    \hline
+    \cite{patel2017classification} & Varios & K-NN-w & Datos & Desbalanceo de clase & F-Measure, AUC, G-Mean & K-NN asignando pesos diferentes en función del tamaño de clase con lógica difusa \\
+    \hline
+    \cite{fernandez2010solving} & Varios & Clasificación multi-clase con lógica difusa & Datos & Desbalanceo de clase & Accuracy & Descomponer dataset original en problemas binarios con agregación difusa \\
+    \hline
+    \cite{hastie1997classification} & No indicado & Cualquiera & Datos & Desbalanceo de clase & Accuracy & Descomponer dataset original en problemas binarios con agregación Pairwise Coupling \\
+    \hline
+    \cite{hullermeier2010combining} & UCI & Cualquiera & Datos & Desbalanceo de clase & Accuracy & Descomponer dataset original en problemas binarios con agregación Weighted Voting Adaptativo \\
+    \hline
+    \cite{lin2017focal} & COCO & \acs{AC:CNN} & Datos & Desbalanceo de clase & Accuracy y Tiempo de inferencia & Focal Loss como función de pérdida adaptativa \\
+    \hline
+    \cite{hong2021fuzzy} & CIFAR-10 & \acs{AC:CNN} & Datos & Desbalanceo de clase & Accuracy & Fuzzy Adaptive Focal Loss como función de pérdida adaptativa \\
+    \hline
+    \hline
+  \end{tabular}
+\end{table}

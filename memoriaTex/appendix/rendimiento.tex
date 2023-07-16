@@ -1,0 +1,79 @@
+Se ofrece la configuración de hiperparámetros óptima para cada experimento de los descritos en el \textsc{Capítulo \ref{CAP:EXPERIMENTACION}}. Asimismo, se incluyen datos de tiempo de ejecución y consumo de memoria de GPU para cada uno, a fin de dar una visión más completa sobre el desarrollo de esta parte del trabajo. Para el experimento \textbf{WGAN}, se aportan dos mediciones separadas por una barra (/): la primera corresponde al entrenamiento de la WGAN para el aumento de datos, y la segunda, al entrenamiento del clasificador sobre la distribución aumentada.
+
+\begin{table}[Rendimiento Baseline]{TB:REN_BASELINE}{Rendimiento e hiperparámetros óptimos para el experimento \textbf{Baseline}.}
+    \small
+    % \vskip-1.0cm\begin{tabular}{|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+         &  \multicolumn{2}{c|}{\textsc{Recursos}} & \multicolumn{3}{c|}{\textsc{Hiperparámetros óptimos}} \\ \hline
+        \textbf{Dataset} & \textbf{GPU RAM (\%)} & \textbf{Tiempo de ejecución} & \textbf{Épocas} & \textbf{batch\_size} & \textbf{learning rate} \\ \hline
+        PlantVillage & 60\% & 36h & 10 & 15 & 1.00E-03 \\ \hline
+        UTKFaceBias & 80\% & 1sem & 25 & 10 & 1.00E-03 \\ \hline
+        UTKFaceFull & 80\% & 1sem & 25 & 10 & 1.00E-04 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[Rendimiento WGAN]{TB:REN_WGAN}{Rendimiento e hiperparámetros óptimos para el experimento \textbf{WGAN}.}
+    \small
+    % \vskip-1.0cm\begin{tabular}{|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+         &  \multicolumn{2}{c|}{\textsc{Recursos}} & \multicolumn{4}{c|}{\textsc{Hiperparámetros óptimos}} \\ \hline
+        \textbf{Dataset} & \textbf{GPU RAM (\%)} & \textbf{Tiempo de ejecución} & \textbf{Épocas} & \textbf{batch\_size} & \textbf{learning rate} & \textbf{beta(Adam)} \\ \hline
+        PlantVillage & 80\% / 60\% & 24h / 36h & 400 / 15 & 128 / 15 & 0.0002 / 0.001 & 0.5 / -- \\ \hline
+        UTKFace & 100\% / 80\% & 36h / 1.5sem & 400 / 25 & 128 / 10 & 0.0002 / 0.001 & 0.5 / -- \\ \hline
+        UTKFaceFull & -- & -- & -- & -- & -- & -- \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[Rendimiento Loss Focal]{TB:REN_FOCAL}{Rendimiento e hiperparámetros óptimos para el experimento \textbf{Loss Focal}.}
+    \small
+    % \vskip-1.0cm\begin{tabular}{|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+         &  \multicolumn{2}{c|}{\textsc{Recursos}} & \multicolumn{4}{c|}{\textsc{Hiperparámetros óptimos}} \\ \hline
+        \textbf{Dataset} & \textbf{GPU RAM (\%)} & \textbf{Tiempo de ejecución} & \textbf{Épocas} & \textbf{batch\_size} & \textbf{learning rate} & \textbf{gamma} \\ \hline
+        PlantVillage & 60\% & 36h & 25 & 15 & 1.00E-04 & 5 \\ \hline
+        UTKFaceBias & 80\% & 1.5sem & 30 & 10 & 1.00E-04 & 2 \\ \hline
+        UTKFaceFull & 80\% & 1.5sem & 30 & 10 & 1.00E-04 & 2 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[Rendimiento Loss Focal Difusa]{TB:REN_FUZZY}{Rendimiento e hiperparámetros óptimos para el experimento \textbf{Loss Focal Difusa}.}
+    \small
+    % \vskip-1.0cm\begin{tabular}{|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+         &  \multicolumn{2}{c|}{\textsc{Recursos}} & \multicolumn{4}{c|}{\textsc{Hiperparámetros óptimos}} \\ \hline
+        \textbf{Dataset} & \textbf{GPU RAM (\%)} & \textbf{Tiempo de ejecución} & \textbf{Épocas} & \textbf{batch\_size} & \textbf{learning rate} & \textbf{gamma} \\ \hline
+        PlantVillage & 60\% & 36h & 10 & 15 & 1.00E-03 & 2 \\ \hline
+        UTKFaceBias & 80\% & 2sem & 25 & 10 & 1.00E-04 & 0.5 \\ \hline
+        UTKFaceFull & 80\% & 2sem & 30 & 10 & 1.00E-04 & 2 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[Rendimiento PRM-IM]{TB:REN_PRMIM}{Rendimiento e hiperparámetros óptimos para el experimento \textbf{PRM-IM}.}
+    \small
+    % \vskip-1.0cm\begin{tabular}{|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+         &  \multicolumn{2}{c|}{\textsc{Recursos}} & \multicolumn{3}{c|}{\textsc{Hiperparámetros óptimos}} \\ \hline
+        \textbf{Dataset} & \textbf{GPU RAM (\%)} & \textbf{Tiempo de ejecución} & \textbf{Épocas} & \textbf{batch\_size} & \textbf{learning rate} \\ \hline
+        PlantVillage & 80\% & 48h & 10 & 15 & 1.00E-03 \\ \hline
+        UTKFaceBias & 90\% & 1.5sem & 25 & 10 & 1.00E-04 \\ \hline
+        UTKFaceFull & -- & -- & -- & -- & -- \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[Rendimiento CoSenCNN]{TB:REN_COSEN}{Rendimiento e hiperparámetros óptimos para el experimento \textbf{CoSenCNN}.}
+    \small
+    % \vskip-1.0cm\begin{tabular}{|c|c|c|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+         &  \multicolumn{2}{c|}{\textsc{Recursos}} & \multicolumn{3}{c|}{\textsc{Hiperparámetros óptimos}} \\ \hline
+        \textbf{Dataset} & \textbf{GPU RAM (\%)} & \textbf{Tiempo de ejecución} & \textbf{Épocas} & \textbf{batch\_size} & \textbf{learning rate} \\ \hline
+        PlantVillage & 60\% & 36h & 25 & 15 & 1.00E-03 \\ \hline
+        UTKFaceBias & 80\% & 1sem & 25 & 10 & 1.00E-04 \\ \hline
+        UTKFaceFull & 80\% & 1.5sem & 25 & 10 & 1.00E-04 \\ \hline
+    \end{tabular}
+\end{table}

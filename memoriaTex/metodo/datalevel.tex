@@ -1,0 +1,22 @@
+En la Sección anterior se ha justificado la elección exclusiva de las GAN por su rendimiento dominante dentro de esta familia de métodos mitigantes del desbalanceo.
+
+% El funcionamiento de SMOTE se basa en la interpolación entre vecinos. Para generar una nueva instancia sintética, SMOTE selecciona dos instancias cercanas de la clase minoritaria existente y genera una instancia sintética que se encuentra en el punto medio de las dos instancias originales. El proceso se repite varias veces hasta que se alcanza el número deseado de instancias sintéticas. Esto ya representa una limitación para esta técnica, ya que dificulta que las muestras generadas estén fuera del espacio de las muestras existentes. Es decir, es difícil que SMOTE dé lugar a características nuevas en el dataset \cite{nafi2020addressing}.
+
+Las redes generativas antagónicas (GAN) son modelos compuestos de dos redes neuronales, que en el dominio de las imágenes habitúan a ser CNNs. Estas redes reciben el nombre de ``discriminador'' y ``generador'' (puede verse en la Figura \ref{FIG:GAN}). El generador toma una entrada de ``ruido'' (\textit{espacio latente aleatorio}), y genera una imagen sintética. El discriminador, dado un dataset, toma una imagen como entrada y produce una salida binaria que indica si esa imagen es real o falsa. Durante el entrenamiento, el discriminador se entrena para clasificar correctamente las imágenes como reales o falsas, mientras que el generador se entrena para producir imágenes que confundan al discriminador y se clasifiquen como reales. A medida que el generador mejora, el discriminador empeora, y en teoría el final del entrenamiento se produce cuando este último tiene una exactitud del 50\%. No obstante, este ``estado de convergencia'' de una GAN suele ser fugaz, en vez de estable \cite{GoogleGAN}: si el discriminador elige al azar, el generador comienza a entrenar para recibir predicciones no deseadas, y su propia calidad disminuye.
+
+\begin{figure}[Esquema de la GAN]{FIG:GAN}{Esquema de funcionamiento de una red antagónica generativa (GAN).}
+    \image{11cm}{}{gan}
+\end{figure}
+
+En concreto, se ha escogido implementar la variante WGAN \cite{arjovsky2017wasserstein}, ya que produce resultados sustancialmente mejores que el esquema clásico, e incluso que la DCGAN \cite{nafi2020addressing}. Esto es debido a varias novedades introducidas en \citet{arjovsky2017wasserstein}. Primero, mientras que una GAN entrena al discriminador con la función de entropía binaria cruzada (BCE), la WGAN utiliza su propia función de pérdida (\textit{Wasserstein-1}) para que el discrimador prediga una ``probabilidad de realismo'', en lugar de una etiqueta binaria. Esto transforma el rol del discriminador en el de un \textit{crítico} que dirime el ``nivel de realismo'' de una entrada dada. Además, el crítico se actualiza más veces que el generador por cada iteración del entrenamiento (en el paper original, son 5 iteraciones de crítico por cada iteración global). La última diferencia importante es el uso del optimizador RMSProp frente al Adam usado por la DCGAN.
+
+Las funciones de pérdida son realmente simples \cite{GoogleGAN}: sea $D(x)$ el resultado del crítico para una instancia real $x$, $G(z)$ la salida del generador cuando recibe un vector $z$ de ruido; y $D(G(z))$ el resultado del crítico para una muestra falsa. Se llama $LossD$ a la pérdida del crítico, y $LossG$ a la del generador:
+
+\begin{equation}[EQ:WASSERSTEINLOSS]{Fórmulas para la función de pérdida \textit{Wasserstein-1}.}
+    \begin{aligned}  
+	LossD = D(x) - D(G(z)) \\
+    LossG = D(G(z))
+    \end{aligned}
+\end{equation}
+
+Al maximizar su función, el crítico intenta maximizar la diferencia entre su resultado en instancias reales y su resultado en instancias falsas; y el generador intenta maximizar el resultado del crítico para sus instancias falsas. Gracias a todas estas novedades, las WGAN son capaces de sintetizar muestras con un mayor nivel de similitud a las reales, mejorando las métricas de clasificación en los dominios probados \cite{arjovsky2017wasserstein}.

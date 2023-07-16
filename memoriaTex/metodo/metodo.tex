@@ -1,0 +1,73 @@
+Para resolver la \textbf{RQ1}, y como primera contribución de este trabajo, es necesario comparar métodos representativos de ambas estrategias sobre los mismos datasets. Recogiendo además las mismas métricas para todas las pruebas realizadas, se pretende llegar a un ``punto en común'' sobre el que obtener respuestas concluyentes. La \textbf{RQ2} se puede resolver una vez determinada la respuesta de la primera, pues los ``mejores'' métodos determinarán si es necesario o no conocer de antemano el desbalanceo presente en los datos. Además, la \textbf{RQ2} motiva que los experimentos se repliquen sobre un mismo dataset con distintos grados de desbalanceo. Por tanto, el primer paso para resolver ambas preguntas es escoger qué métodos mitigantes de cada familia de estrategias se propone comparar.
+
+En primer lugar, elegir los métodos de mitigación a nivel de datos es más sencillo, al haber comparativas concluyentes en la bibliografía \cite{upadhyay2021state,nafi2020addressing}. Como se ha mencionado, en \citet{nafi2020addressing}, se compara el rendimiento del submuestreo, el sobremuestreo, el SMOTE y la GAN para mejorar el rendimiento en un clasificador de imágenes de plantas de tomate con y sin infecciones. Los autores llegan a la conclusión de que las GAN son, de lejos, el método más efectivo de mitigación del desbalanceo a nivel de datos. Esta conclusión ha sido ratificada por otras revisiones, como \citet{johnson2019survey}. Para empezar, el sub/sobremuestreo tienen una marcada tendencia al sobreajuste y reportan las métricas más bajas \cite{johnson2019survey, upadhyay2021state, nafi2020addressing}. Por su parte, SMOTE no logra que las muestras artificiales sean lo suficientemente parecidas a las reales como para aportar ``variedad útil'' al conjunto de datos \cite{nafi2020addressing}. En cambio, la arquitectura convolucional de las GAN las convierte en algoritmos mucho más potentes, capaces de generar imágenes artificiales con un sorprendente nivel de realismo \cite{johnson2019survey}. En concreto, se ha escogido la variante WGAN \cite{arjovsky2017wasserstein}, ya que como se muestra en \citet{nafi2020addressing}, la función de pérdida \textit{Wasserstein-1} permite un mejor ajuste del sistema y produce mejores resultados que el esquema clásico o la DCGAN. En cuanto a las demás técnicas bibliográficas de esta familia, la Tabla \ref{TB:DATA_DISCARD} resume el motivo por el que no se consideran para las comparativas.
+
+\begin{table}[Motivo de descarte - métodos a nivel de datos]{TB:DATA_DISCARD}{Motivo de descarte de los métodos a nivel de datos no escogidos para los experimentos de este trabajo. El método escogido aparece subrayado.}
+    \small
+    % \hskip-3.0cm\begin{tabular}{|l|p{6.5cm}|p{6.5cm}|}
+    \begin{tabular}{lp{6.5cm}p{6.5cm}}
+        \hline
+        \textsc{Método} & \textsc{Descripción} & \textsc{Motivo de descarte} \\
+        \hline
+        Submuestreo aleatorio (RUS) & Descartar muestras de la clase minoritaria hasta alcanzar el equilibrio. & Métricas notablemente más bajas, aprendizaje pobre \cite{johnson2019survey, upadhyay2021state, nafi2020addressing}. \\ \hline
+        Sobremuestreo aleatorio (ROS) & Duplicar y/o alterar muestras minoritarias existentes hasta alcanzar el equilibrio. & Mismas deficiencias que submuestreo, más el riesgo elevado de sobreajuste \cite{johnson2019survey, upadhyay2021state, nafi2020addressing}. \\ \hline
+        RUS basado en clústers \cite{lin2017clustering} & Sustituir muestras mayoritarias por tantos centroides de K-means como muestras haya en la clase minoritaria. & Aprendizaje pobre y difícil en entornos complejos como el aprendizaje de imágenes (diseñado para datos tabulares). \\ \hline
+        SMOTE \cite{chawla2002smote} & Interpolar nuevas muestras minoritarias sintéticas a partir de las existentes. & Menos capacidad de generar información nueva y ``variedad útil'' que las GAN \cite{nafi2020addressing}. \\ \hline
+        ADASYN \cite{he2008adasyn} & Misma idea que SMOTE, dando más importancia a muestras difíciles al interpolar. & Menos capacidad de generar información nueva y ``variedad útil'' que las GAN \cite{nafi2020addressing}. \\ \hline
+        DCGAN \cite{nafi2020addressing} & Familia de redes convolucionales generativas antagónicas (GANs) profundas. & Funciona bien, pero la mejora introducida en la WGAN ayuda aún más a estabilizar el aprendizaje \cite{nafi2020addressing}. \\ \hline
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        \underline{WGAN} \cite{arjovsky2017wasserstein} & DCGAN adaptada con la función de pérdida \textit{Wasserstein-1} para mayor estabilidad y calidad de las muestras sintéticas. & \\ \hline
+    \end{tabular}
+\end{table}
+
+En segundo lugar están los métodos de mitigación a nivel de algoritmo. Durante el análisis bibliográfico se ha notado una ausencia de comparativas concluyentes que afirmen la superioridad de un método sobre el resto, como sí ocurre con las estrategias a nivel de datos. Con todo, resalta la popularidad de métodos que modifican las funciones de pérdida a fin de modificar la ``atención'' dada por el modelo a las clases mayoritaria y minoritaria: en especial la Loss Focal (con un 91\% de Accuracy en \citet{lin2017focal}) y la red sensible a costes (CoSen CNN) de \citet{khan2017cost}, que en los datasets probados obtiene una F1-score promedio superior al 80\% \cite{johnson2019survey}. También son prometedores los resultados de la técnica PRM-IM \cite{liu2022solving}, con más de un 93\% de F1-score en clasificación de radiografías. Otras técnicas tienen el inconveniente de estar diseñadas para problemas de aprendizaje sencillos (con datos tabulares y clasificadores simples), y por ello no son adecuadas para mitigar el sesgo en problemas más complejos, como lo es la clasificación de imágenes con CNNs. La Tabla \ref{TB:ALGO_DISCARD} resume el motivo de descarte de las otras técnicas identificadas en la bibliografía.
+
+\begin{table}[Motivo de descarte - métodos a nivel de algoritmo]{TB:ALGO_DISCARD}{Motivo de descarte de los métodos a nivel de algoritmo no escogidos para los experimentos de este trabajo. Los métodos escogidos aparecen subrayados.}
+    \small
+    \hskip-3.0cm\begin{tabular}{|l|p{6.5cm}|p{6.5cm}|}
+    % \begin{tabular}{lp{6.5cm}p{6.5cm}}
+        \hline
+        \textsc{Método} & \textsc{Descripción} & \textsc{Motivo de descarte} \\
+        \hline
+        Reponderación ubicua \cite{li2019learning} & Balancear la contribución entre clases completas y muestras individuales a la pérdida por entropía cruzada. & Arquitectura no disponible en dominio público. \\ \hline
+        Suavizado de etiquetas \cite{zhong2021improving} & Suavizado de la distribución ``\textit{long-tailed}'' dentro de la función de pérdida de entropía cruzada. & Solamente válido para un gran número de clases (en la bibliografía es habitual que sean 100 o más). \\ \hline
+        Vecinos difusos \cite{patel2017classification} & K-vecinos próximos con pesos difusos para mejorar la detección de clase minoritaria. & El algoritmo K-NN es menos apropiado que las CNN para el caso concreto de la clasificación de imágenes. \\ \hline
+        IEFSVM \cite{cho2020instance} & SVM modificada con un Sistema de Control Difuso (FCS) para mejorar la detección de clase minoritaria. & El algoritmo SVM es menos apropiado que las CNN para el caso concreto de la clasificación de imágenes. \\ \hline
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        \underline{Loss Focal} \cite{lin2017focal} & Nueva función de pérdida que repondera muestras de la clase mayoritaria, reduciendo su impacto en la pérdida total. & \\ \hline
+        \underline{CoSen CNN} \cite{khan2017cost} & Red con matriz de costes dinámica para aprender distintas penalizaciones en los errores de clasificación. & \\ \hline
+        \underline{PRM-IM} \cite{liu2022solving} & Sistema de repetición de la clase minoritaria junto a subconjuntos de la mayoritaria, unido a un extractor de características formado por dos CNNs. & \\ \hline
+    \end{tabular}
+\end{table}
+
+Por último, para resolver la \textbf{RQ3} (relativa al impacto de la complejidad del problema en la decisión del método de mitigación), se propone realizar los experimentos sobre dos datasets de distinta complejidad, además de los distintos grados de desbalanceo ya propuestos. Para esto también es necesario contextualizar los resultados de los experimentos de acuerdo a algún tipo de métrica que cuantifique la ``complejidad'' de los datasets empleados. Es en ello esencial la revisión de \citet{rahane2020measures}, que propone las siguientes métricas estadísticas:
+
+\begin{itemize}
+    \fontsize{11pt}{12pt}\selectfont
+    \item \textbf{Distancia de Minkowski} \cite{tensorflow2015-whitepaper}: es un método usado por defecto en las librerías de aprendizaje automático para calcular la distancia entre cada par de imágenes de un dataset. Es útil para dirimir el grado de similitud entre dos muestras (la distancia es próxima a cero cuanto más similares sean), y es preferible a la distancia euclídea \cite{rahane2020measures}.
+    
+    \item \textbf{Entropía}: es una medida de la incertidumbre o la aleatoriedad de un conjunto de datos. Si las imágenes en un dataset son muy parecidas, se espera que tengan una entropía baja, mientras que si son muy diferentes, se espera que tengan una entropía alta. En \citet{rahane2020measures} se recomiendan:
+
+    \begin{itemize}
+        \fontsize{11pt}{12pt}\selectfont
+        \item \textbf{Entropía de Shannon}: también llamada entropía de la información, se puede calcular a partir de la distribución de probabilidad de los píxeles de las imágenes:
+
+        \begin{equation}[EQ:SHANNON]{Fórmula para la entropía estándar de Shannon.}
+            H = -\sum_{i=0}^{n-1}{p_i log \; p_i}
+        \end{equation}
+
+        \item \textbf{GLCM} (\textit{Gray-Level Co-occurrence Matrix}): un histograma de co-ocurrencia de píxeles que ayuda a caracterizar la textura de las imágenes \cite{rahane2020measures}, al relacionar los valores de instensidad (0-255) con el vecindario para hallar relaciones espaciales. Su fórmula es:
+
+        \begin{equation}[EQ:GLCM]{Fórmula para la entropía GLCM.}
+            H_g = -\sum_{i=0}^{n-1}{\sum_{j=1}^{n-1}{p(i,j) log \; p(i,j)}}
+        \end{equation}
+        
+    \end{itemize}
+\end{itemize}
+
+
+En el resto del capítulo se detallan a nivel teórico los métodos y algoritmos de mitigación de sesgo por desbalanceo de clases que han sido comparados en los experimentos, a fin de dar respuesta a las preguntas de investigación \textbf{RQ1} y \textbf{RQ2}. Las técnicas probadas pueden agruparse como estrategias a nivel de datos y algorítmicas. Dentro de esta última categoría, y como aportación novedosa de este trabajo, se ha diseñado un método de mitigación a nivel de algoritmo propio, llamado Loss Focal Difusa. %, que también se comparará en los experimentos.

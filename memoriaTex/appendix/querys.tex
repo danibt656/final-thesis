@@ -1,0 +1,189 @@
+Se adjuntan las consultas usadas para extraer bibliografía de las bases de datos académicas.
+Para realizar el estudio bibliográfico relacionado con este trabajo, se han buscado artículos por medio de los buscadores avanzados que ofrencen las bases de datos Web of Science (WoS), el IEEE y Scopus. Primero se han realizado consultas para investigar sobre el problema de la clasificación de género en imágenes; y después se ha explorado el problema del sesgo presente (y muy en especial el causado por desbalanceo de clases).
+
+\begin{table}[Consulta género - IEEE]{}{Consulta para papers de reconocimiento de género facial con el motor del IEEE.}
+    \small
+    \begin{tabular}{|l|}
+    \hline
+        \makecell[l]{( ``people'' OR ``person'' OR ``human'' ) AND \\
+        ( ``gender'' ) AND \\
+        ( ``image recognition'' OR ``image classification'' ) AND \\
+        ( ``data science'' ``OR deep learning'' OR ``machine learning OR ``ML'' ) AND \\
+        ( ``algorithm'' OR ``technique'' )} \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[Consulta género - WoS]{}{Consulta para papers de reconocimiento de género facial con el motor de Web of Science.}
+    \small
+    \begin{tabular}{|l|}
+    \hline
+        \makecell[l]{( \\
+        TI=``people'' OR TS=``people'' OR AB=``people'' OR AK=``people'' OR \\
+        TI=``person'' OR TS=``person'' OR AB=``person'' OR AK=``person'' OR \\
+        TI=``human'' OR TS=``human'' OR AB=``human'' OR AK=``human'' \\
+        ) AND ( \\
+            TI=``gender'' OR TS=``gender OR AB=``gender'' OR AK=``gender \\
+        ) AND ( \\
+            TI=``image recognition'' OR TS=``image recognition'' \\
+            OR AK=``image recognition'' OR \\
+            TI=``image classification'' OR TS=``image classification'' \\
+            OR AK=``image classification'' \\
+        ) AND ( \\
+            TI=``data science'' OR TS=``data science'' OR AB=``data science'' \\
+            OR AK=``data science'' OR \\
+            TI=``deep learning'' OR TS=``deep learning'' OR AB=``deep learning'' \\
+            OR AK=``deep learning'' OR \\
+            TI=``machine learning'' OR TS=``machine learning'' \\
+            OR AB=``machine learning'' OR AK=``machine leaning'' OR \\
+            TI=``ML'' OR TS=``ML'' OR AB=``ML'' OR AK=``ML'' \\
+        ) AND ( \\
+            TI=``algorithm'' OR TS=``algorithm'' OR AB=``algorithm'' \\
+            OR AK=``algorithm'' OR \\
+            TI=``technique'' OR TS=``technique'' OR AB=``technique'' \\
+            OR AK=``technique'' \\
+        )} \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[Consulta género - Scopus]{}{Consulta para papers de reconocimiento de género facial con el motor de Scopus.}
+    \small
+    \begin{tabular}{|l|}
+    \hline
+        \makecell[l]{( \\
+            TITLE-ABS-KEY(``people'') OR \\
+            TITLE-ABS-KEY(``person'') OR \\
+            TITLE-ABS-KEY(``human'') \\
+        ) AND ( \\
+            TITLE-ABS-KEY(``gender'') \\
+        ) AND ( \\
+            TITLE-ABS-KEY(``image recognition'') OR \\
+            TITLE-ABS-KEY(``image classfication'') \\
+        ) AND ( \\
+            TITLE-ABS-KEY(``data science'') OR \\
+            TITLE-ABS-KEY(``deep learning'') OR \\
+            TITLE-ABS-KEY(``machine leaning'') OR \\
+            TITLE-ABS-KEY(``ML'') \\
+        ) AND ( \\
+            TITLE-ABS-KEY(``algorithm'') OR \\
+            TITLE-ABS-KEY(``technique'') \\
+        )} \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[Consulta sesgo - IEEE 1]{}{Consulta para papers de sesgos en la clasificación de imágenes con el motor del IEEE.}
+    \small
+    \begin{tabular}{|l|}
+    \hline
+        \makecell[l]{( ``bias'' ) AND \\
+        ( ``image recognition'' OR ``image classification'' ) AND \\
+        ( ``data science'' OR ``deep learning'' OR ``machine learning'' OR ``ML'' ) AND \\
+        ( ``data'' OR ``dataset'' )} \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[Consulta sesgo - IEEE 2]{}{Consulta secundaria para papers de sesgos en la clasificación de imágenes con el motor del IEEE.}
+    \small
+    \begin{tabular}{|l|}
+    \hline
+        \makecell[l]{( fuzzy OR class imabalance OR imbalance OR imbalanced) AND \\
+        ( bias ) AND \\
+        ( data science OR deep learning OR machine learning OR ML ) AND \\
+        ( data OR dataset ) AND \\
+        ( imbalanced )} \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[Consulta sesgo - WoS]{}{Consulta para papers de sesgos en la clasificación de imágenes con el motor de Web of Science.}
+    \small
+    \begin{tabular}{|l|}
+    \hline
+        \makecell[l]{( \\
+            TI=``bias'' OR TS=``bias'' OR AB=``bias'' OR AK=``bias'' \\
+        ) AND ( \\
+            TI=``image recognition'' OR TS=``image recognition'' \\
+            OR AB=``image recognition'' OR AK=``image recognition'' \\
+            OR TI=``image classification'' OR TS=``image classification'' \\
+            OR AB=``image classification'' OR AK=``image classification'' \\
+        ) AND ( \\
+            TI=``data science'' OR TS=``data science'' \\
+            OR AB=``data science'' OR AK=``data science'' \\
+            OR TI=``deep learning'' OR TS=``deep learning'' \\
+            OR AB=``deep learning'' OR AK=``deep learning'' \\
+            OR TI=``machine learning'' OR TS=``machine learning'' \\
+            OR AB=``machine learning'' OR AK=``machine learning'' \\
+            OR TI=``ML'' OR TS=``ML'' OR AB=``ML'' OR AK=``ML'' \\
+        ) AND ( \\
+            TI=``data'' OR TS=``data'' OR AB=``data'' OR AK=``data'' OR \\
+            TI=``dataset'' OR TS=``dataset'' OR AB=``dataset'' OR AK=``dataset'' \\
+        )} \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[Consulta sesgo - Scopus 1]{}{Consulta para papers de sesgos en la clasificación de imágenes con el motor de Scopus.}
+    \small
+    \begin{tabular}{|l|}
+    \hline
+        \makecell[l]{( \\
+            TITLE-ABS-KEY(``bias'') \\
+        ) \\
+        AND \\
+        ( \\
+            TITLE-ABS-KEY(``image recognition'') OR \\
+            TITLE-ABS-KEY(``image classification'') \\
+        ) \\
+        AND \\
+        ( \\
+            TITLE-ABS-KEY(``data science'') OR \\
+            TITLE-ABS-KEY(``deep learning'') OR \\
+            TITLE-ABS-KEY(``machine learning'') OR \\
+            TITLE-ABS-KEY(``ML'') \\
+        ) \\
+        AND \\
+        ( \\
+            TITLE-ABS-KEY(``data'') OR \\
+            TITLE-ABS-KEY(``dataset'') \\
+        )} \\
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[Consulta sesgo - Scopus 2]{}{Consulta secundaria para papers de sesgos en la clasificación de imágenes con el motor de Scopus.}
+    \small
+    \begin{tabular}{|l|}
+    \hline
+        \makecell[l]{( \\
+            TITLE-ABS-KEY ( ``gender'' ) \\
+        ) \\
+        AND \\
+        ( \\
+            TITLE-ABS-KEY ( ``bias'' ) OR \\
+            TITLE-ABS-KEY ( ``imbalance'' ) OR \\
+            TITLE-ABS-KEY ( ``imbalanced'' ) OR \\
+            TITLE-ABS-KEY ( ``class imbalance'' ) OR \\
+        ) \\
+        AND \\
+        ( \\
+            TITLE-ABS-KEY ( ``image recognition'' )  OR \\
+            TITLE-ABS-KEY ( ``image classification'' ) \\
+        ) \\
+        AND \\
+        ( \\
+            TITLE-ABS-KEY ( ``data science'' )  OR \\
+            TITLE-ABS-KEY ( ``deep learning'' )  OR \\
+            TITLE-ABS-KEY ( ``machine learning'' )  OR \\
+            TITLE-ABS-KEY ( ``ML'' ) \\
+        ) \\
+        AND \\
+        ( \\
+            TITLE-ABS-KEY ( ``data'' )  OR \\
+            TITLE-ABS-KEY ( ``dataset'' ) \\
+        )} \\
+    \hline
+    \end{tabular}
+\end{table}

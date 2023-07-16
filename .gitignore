@@ -27,7 +27,5 @@ src/saves/
 src/lightning_logs/
 src/grid_search/
 
-celeba/CelebA
-
 resnet_ffceloss/mnist
 resnet_ffceloss/lightning_logs/

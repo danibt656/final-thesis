@@ -1,0 +1,97 @@
+% arara: clean: {files: [tfgtfmthesisuam.aux, tfgtfmthesisuam.idx, tfgtfmthesisuam.ilg, tfgtfmthesisuam.ind, tfgtfmthesisuam.bbl, tfgtfmthesisuam.bcf, tfgtfmthesisuam.blg, tfgtfmthesisuam.run.xml, tfgtfmthesisuam.fdb_latexmk, tfgtfmthesisuam.fls, tfgtfmthesisuam.loe, tfgtfmthesisuam.lof, tfgtfmthesisuam.lol, tfgtfmthesisuam.lot, tfgtfmthesisuam.ltb, tfgtfmthesisuam.out, tfgtfmthesisuam.toc, tfgtfmthesisuam.upa, tfgtfmthesisuam.upb, tfgtfmthesisuam.acn, tfgtfmthesisuam.acr, tfgtfmthesisuam.alg, tfgtfmthesisuam.glg, tfgtfmthesisuam.glo, tfgtfmthesisuam.gls, tfgtfmthesisuam.glsdefs, tfgtfmthesisuam.idx,  tfgtfmthesisuam.ilg, tfgtfmthesisuam.xdy, tfgtfmthesisuam.loa, tfgtfmthesisuam.gnuploterrors , tfgtfmthesisuam.mw, tfgtfmthesisuam.fdb_latexmk ]}
+% arara: pdflatex: {shell: yes}
+% arara: makeglossaries
+% arara: makeindex: {style: tfgtfmthesisuam.ist }
+% arara: bibtex
+% arara: pdflatex: {shell: yes}
+% arara: pdflatex: {shell: yes}
+% arara: clean: {files: [tfgtfmthesisuam.aux, tfgtfmthesisuam.idx, tfgtfmthesisuam.ilg, tfgtfmthesisuam.ind, tfgtfmthesisuam.bbl, tfgtfmthesisuam.bcf, tfgtfmthesisuam.blg, tfgtfmthesisuam.run.xml, tfgtfmthesisuam.fdb_latexmk, tfgtfmthesisuam.fls, tfgtfmthesisuam.loe, tfgtfmthesisuam.lof, tfgtfmthesisuam.lol, tfgtfmthesisuam.lot, tfgtfmthesisuam.ltb, tfgtfmthesisuam.out, tfgtfmthesisuam.toc, tfgtfmthesisuam.upa, tfgtfmthesisuam.upb, tfgtfmthesisuam.acn, tfgtfmthesisuam.acr, tfgtfmthesisuam.alg, tfgtfmthesisuam.glg, tfgtfmthesisuam.glo, tfgtfmthesisuam.gls, tfgtfmthesisuam.glsdefs, tfgtfmthesisuam.idx,  tfgtfmthesisuam.ilg, tfgtfmthesisuam.xdy, tfgtfmthesisuam.loa, tfgtfmthesisuam.gnuploterrors , tfgtfmthesisuam.mw, tfgtfmthesisuam.fdb_latexmk ]}
+
+\documentclass[epsbased,copyright,final,printable,covers,extendedindex,firstnumbered,tfg,gnuplot]{tfgtfmthesisuam}
+
+\advisor{Lara Quijano}
+\levelin{Ingeniería Informática}
+\title[]{Hacia una visión más justa: abordando el desbalanceo de clases en el reconocimiento de género en imágenes}
+% \subtitle{Si hace falta subtítulo}
+\author{Daniel Barahona Martín}
+\privateaddress{C\textbackslash\ Francisco Tomás y Valiente Nº 11}
+\copyrightdate{2022}
+
+\dedication{A mis padres}
+\famouscite{I was an ordinary kid who studied hard. There are no miracle people. It happens they get interested in this thing and they learn all this stuff, but they’re just people. \\[0.1em] \begin{flushright}Richard P. Feynman\end{flushright}}
+\ackfile{inicio/agradecimientos}
+\resumenfile{inicio/resumen}
+\abstractfile{inicio/abstract}
+
+\keywords{Algunas}
+\palabrasclave{Otras}
+
+% -------------------------------------
+% Acrónimos
+% -------------------------------------
+% \newacronym{AC:AA}{AA}{Aprendizaje Autom\'atico}
+% \newacronym{AC:CNNS}{CNNs}{Redes Neuronales Convolucionales}
+% \newacronym{AC:AdaBoost}{AdaBoost}{Adaptive Boosting}
+% \newacronym{AC:RF}{RF}{Random Forest}
+% \newacronym{AC:HOG}{HOG}{Histogramas de Gradientes Orientados}
+% \newacronym{AC:LBP}{LBP}{Patrones Locales Binarios}
+% \newacronym{AC:RQ}{RQ}{\textit{Preguntas de Investigaci\'on o Research Questions}}
+% \newacronym{AC:SMOTE}{SMOTE}{Synthetic Minority Over-sampling Technique}
+% \newacronym{AC:FCS}{FCS}{\textit{sistema de control difuso}}
+
+\coverdata
+{
+  Escuela Politécnica Superior \\
+  Universidad Autónoma de Madrid \\
+  C\textbackslash Francisco Tomás y Valiente nº 11
+}
+
+\bibliographyconfig{tfgtfmthesisuam}
+
+\datadir{data}
+\graphicsdir{img}
+\logosdir{img}
+\codesdir{codes}
+
+\usepackage{makecell}
+\usepackage{lscape}
+\usepackage[numbers, sort, comma]{natbib}
+
+\begin{document}
+
+\chapter{Introducción\label{CAP:INTRO}}{intro/intro}
+
+\chapter{Trabajo relacionado\label{CAP:STATEOFART}}{stateofart/stateofart}
+    % \section{Detección de caras en imágenes\label{SEC:FACE_DETECT}}{stateofart/facedetect}
+    \section{El problema de la clasificación de género\label{SEC:PROBLEMA}}{stateofart/genderclf}
+    \section{Sesgos en la clasificación de imágenes\label{SEC:SESGO}}{stateofart/bias}
+    \section{Mitigación del sesgo por desbalanceo de clases \label{SEC:IMBALANCE}}{stateofart/imb_intro}
+        \subsection{Técnicas de mitigación a nivel de datos\label{SEC:SOTA_DATALEVEL}}{stateofart/imb_datalevel}
+        \subsection{Técnicas de mitigación a nivel de algoritmo\label{SEC:SOTA_ALGOLEVEL}}{stateofart/imb_algolevel}
+    \section{Resumen\label{SEC:RESGAPS}}{stateofart/resgaps}
+    
+\chapter{Métodos empleados\label{CAP:METODO}}{metodo/metodo}
+    \section{Método a nivel de datos\label{SEC:DATALEVEL}}{metodo/datalevel}
+    \section{Métodos a nivel de algoritmo\label{SEC:ALGOLEVEL}}{metodo/algolevel}
+
+% \chapter{Implementación del sistema\label{CAP:IMPLEMENTACION}}{implementacion/implementacion} % materials and methods
+%     \section{Elección del modelo\label{SEC:DECOMP}}{implementacion/model_elect}
+%     \section{Elección del dataset\label{SEC:DECOMP}}{implementacion/data_elect}
+
+\chapter{Implementación y experimentos\label{CAP:EXPERIMENTACION}}{experimentacion/experimentacion}
+
+\chapter{Análisis de resultados\label{CAP:RESULTS}}{results/results}
+
+\chapter{Conclusiones y trabajo futuro\label{CAP:CONCLUSION}}{conclusion/conclusion}
+
+\bibliographystyle{unsrtnat}
+
+\appendix
+
+\chapter{Consultas bibliográficas\label{AP:QUERYS}}{appendix/querys}
+
+\chapter{Información adicional de los experimentos\label{AP:RENDIMIENTO}}{appendix/rendimiento}
+
+% \chapter{Tablas extensas\label{AP:TABLAS}}{appendix/tablas} % ¿¿¿¿ NECESARIO ????
+
+\end{document}
